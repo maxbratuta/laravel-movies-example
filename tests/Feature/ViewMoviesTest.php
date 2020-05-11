@@ -9,7 +9,8 @@ use Tests\TestCase;
 class ViewMoviesTest extends TestCase
 {
     /**
-     * Function make a test of the main page
+     * Function make a test of the main page.
+     *
      * @test
      */
     public function the_main_page_shows_correct_info()
@@ -30,7 +31,8 @@ class ViewMoviesTest extends TestCase
     }
 
     /**
-     * Function make a test of some movie page
+     * Function make a test of some movie page.
+     *
      * @test
      */
     public function the_movie_page_shows_correct_info()
@@ -47,7 +49,8 @@ class ViewMoviesTest extends TestCase
     }
 
     /**
-     * Function make a test of the search
+     * Function make a test of the search.
+     *
      * @test
      */
     public function the_search_dropdown_works_correctly()
@@ -63,7 +66,8 @@ class ViewMoviesTest extends TestCase
     }
 
     /**
-     * Function return fake response of popular movie(s)
+     * Function return fake response of popular movie(s).
+     *
      * @return mixed
      */
     private function fakePopularMovies()
@@ -97,7 +101,8 @@ class ViewMoviesTest extends TestCase
     }
 
     /**
-     * Function return fake response of now playing movie(s)
+     * Function return fake response of now playing movie(s).
+     *
      * @return mixed
      */
     private function fakeNowPlayingMovies()
@@ -131,7 +136,8 @@ class ViewMoviesTest extends TestCase
     }
 
     /**
-     * Function return fake response of genres
+     * Function return fake response of genres.
+     *
      * @return mixed
      */
     private function fakeGenres()
@@ -219,7 +225,8 @@ class ViewMoviesTest extends TestCase
     }
 
     /**
-     * Function return fake response of some single movie
+     * Function return fake response of some single movie.
+     *
      * @return mixed
      */
     private function fakeSingleMovie()
@@ -302,7 +309,8 @@ class ViewMoviesTest extends TestCase
     }
 
     /**
-     * Function return fake response of some searching movie
+     * Function return fake response of some searching movie.
+     *
      * @return mixed
      */
     private function fakeSearchMovies()

@@ -7,23 +7,21 @@ use Illuminate\View\Component;
 class MovieCard extends Component
 {
     public $movie;
-    public $genres;
 
     /**
-     * Create a new component instance.
+     * MovieCard constructor.
      *
-     * @return void
+     * @param $movie
      */
-    public function __construct($movie, $genres)
+    public function __construct($movie)
     {
         $this->movie = $movie;
-        $this->genres = $genres;
     }
 
     /**
      * Get the view / contents that represent the component.
      *
-     * @return \Illuminate\View\View|string
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
      */
     public function render()
     {
