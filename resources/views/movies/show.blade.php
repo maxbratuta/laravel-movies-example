@@ -3,8 +3,11 @@
 @section('content')
     <div class="movie-info border-b border-gray-800">
         <div class="container mx-auto px-4 py-16 flex flex-col md:flex-row">
-            <img src="{{ $movie['poster_path'] }}" alt="{{ $movie['title'] }}"
-                 class="w-64 md:w-96">
+            <div class="flex-none">
+                <img src="{{ $movie['poster_path'] }}"
+                     alt="{{ $movie['title'] }}"
+                     class="w-64 md:w-96">
+            </div>
             <div class="md:ml-24">
                 <h2 class="text-4xl font-semibold">{{ $movie['title'] }}</h2>
                 <div class="flex flex-wrap items-center text-gray-400 text-sm">
@@ -25,17 +28,20 @@
                     <span>{{ $movie['genres'] }}</span>
                 </div>
                 <p class="text-gray-300 mt-8">{{ $movie['overview'] }}</p>
-                <div class="mt-12">
-                    <h4 class="text-white font-semibold">Featured Crew</h4>
-                    <div class="flex mt-4">
-                        @foreach($movie['crew'] as $crew)
-                            <div class="mr-8">
-                                <div>{{ $crew['name'] }}</div>
-                                <div class="text-sm text-gray-400">{{ $crew['job'] }}</div>
-                            </div>
-                        @endforeach
+
+                @if(count($movie['crew']) > 0)
+                    <div class="mt-12">
+                        <h4 class="text-white font-semibold">Featured Crew</h4>
+                        <div class="flex mt-4">
+                            @foreach($movie['crew'] as $crew)
+                                <div class="mr-8">
+                                    <div>{{ $crew['name'] }}</div>
+                                    <div class="text-sm text-gray-400">{{ $crew['job'] }}</div>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
-                </div>
+                @endif
 
                 <div x-data="{ isOpen: false }">
                     @if(count($movie['videos']['results']) > 0)
@@ -43,8 +49,8 @@
                             <button
                                 @click="isOpen = true"
                                 href="https://youtube.com/watch?v={{ $movie['videos']['results'][0]['key'] }}"
-                               target="_blank"
-                               class="flex inline-flex items-center bg-orange-500 text-gray-900 rounded font-semibold px-5 py-4 hover:bg-orange-600 transition ease-in-out duration-150">
+                                target="_blank"
+                                class="flex inline-flex items-center bg-orange-500 text-gray-900 rounded font-semibold px-5 py-4 hover:bg-orange-600 transition ease-in-out duration-150">
                                 <svg class="w-6 fill-current" viewBox="0 0 24 24">
                                     <path d="M0 0h24v24H0z" fill="none"/>
                                     <path
@@ -88,36 +94,41 @@
         </div>
     </div> <!-- end movie-info -->
 
-    <div class="movie-cast border-b border-gray-800">
-        <div class="container mx-auto px-3 py-16">
-            <h2 class="text-4xl font-semibold">Cast</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-                @foreach($movie['cast'] as $cast)
+    @if(count($movie['cast']) > 0)
+        <div class="movie-cast border-b border-gray-800">
+            <div class="container mx-auto px-3 py-16">
+                <h2 class="text-4xl font-semibold">Cast</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+                    @foreach($movie['cast'] as $cast)
                         <div class="mt-8">
-                            <a href="#">
+                            <a href="{{ route('actors.show', $cast['id']) }}">
                                 <img src="{{ $cast['profile_path'] }}"
                                      alt="{{ $cast['name'] }}"
                                      class="hover:opacity-75 transition ease-in-out duration-150">
                             </a>
                             <div class="mt-2">
-                                <a href="#" class="text-lg mt-2 hover:text-gray-300">{{ $cast['name'] }}</a>
+                                <a href="{{ route('actors.show', $cast['id']) }}"
+                                   class="text-lg mt-2 hover:text-gray-300">{{ $cast['name'] }}</a>
                                 <div class="text-gray-400 text-sm">{{ $cast['character'] }}</div>
                             </div>
                         </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
-        </div>
-    </div> <!-- end movie-cast -->
-    <div class="movie-images border-b border-gray-800"
-         x-data="{ isOpen: false, image: '' }"
-    >
-        <div class="container mx-auto px-3 py-16">
-            <h2 class="text-4xl font-semibold">Images</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @foreach($movie['images'] as $image)
+        </div> <!-- end movie-cast -->
+    @endif
+
+    @if(count($movie['images']) > 0)
+        <div class="movie-images border-b border-gray-800"
+             x-data="{ isOpen: false, image: '' }"
+        >
+            <div class="container mx-auto px-3 py-16">
+                <h2 class="text-4xl font-semibold">Images</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    @foreach($movie['images'] as $image)
                         <div class="mt-8">
                             <a href="#"
-                                @click.prevent="
+                               @click.prevent="
                                     isOpen = true
                                     image='{{ $image['original_file_path'] }}'
                                 "
@@ -127,31 +138,32 @@
                                      class="hover:opacity-75 transition ease-in-out duration-150">
                             </a>
                         </div>
-                @endforeach
-            </div>
+                    @endforeach
+                </div>
 
-            <div
-                style="background-color: rgba(0, 0, 0, .5);"
-                class="fixed top-0 left-0 w-full h-full flex items-center shadow-lg overflow-y-auto"
-                x-show.transition.opacity="isOpen"
-            >
-                <div class="container mx-auto lg:px-32 rounded-lg overflow-y-auto">
-                    <div class="bg-gray-900 rounded">
-                        <div class="flex justify-end pr-4 pt-2">
-                            <button
-                                @click="isOpen = false"
-                                @keydown.escape.window="isOpen = false"
-                                class="text-3xl leading-none hover:text-gray-300">&times;
-                            </button>
-                        </div>
-                        <div class="modal-body px-8 py-8">
-                            <img :src="image" alt="poster">
+                <div
+                    style="background-color: rgba(0, 0, 0, .5);"
+                    class="fixed top-0 left-0 w-full h-full flex items-center shadow-lg overflow-y-auto"
+                    x-show.transition.opacity="isOpen"
+                >
+                    <div class="container mx-auto lg:px-32 rounded-lg overflow-y-auto">
+                        <div class="bg-gray-900 rounded">
+                            <div class="flex justify-end pr-4 pt-2">
+                                <button
+                                    @click="isOpen = false"
+                                    @keydown.escape.window="isOpen = false"
+                                    class="text-3xl leading-none hover:text-gray-300">&times;
+                                </button>
+                            </div>
+                            <div class="modal-body px-8 py-8">
+                                <img :src="image" alt="poster">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-        </div>
-    </div> <!-- end movie-images -->
+            </div>
+        </div> <!-- end movie-images -->
+    @endif
 
 @endsection
